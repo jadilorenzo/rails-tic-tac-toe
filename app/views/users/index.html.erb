@@ -1,11 +1,13 @@
 <h1 class='mb-2 font-bold text-xl'>Users</h1>
+<%= link_to "Login", "/users/login" %>
 
 <ul>
   <% @users.each do |u| %>
     <li class='mb-2'>
       Username: <%= link_to u.username, "/users/#{u.id}" %> <br/>
       Password: <%= u.password.split('').map{'•'}.join %><br/>
-      Active: <%= u.active %>
+      Active: <%= u.active %><br/>
+      <%= button_to "Logout", action: 'logout', params: { id: u.id }%>
     </li>
   <% end %>
 </ul>

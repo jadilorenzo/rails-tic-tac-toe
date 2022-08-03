@@ -48,12 +48,24 @@ class UsersController < ApplicationController
 
   def login_success
     @user = User.find_by(user_params)
-
+    
     if (@user)
       @user.update(active: true)
       redirect_to action: 'index'
     else
       redirect_to action: 'login'
+    end
+  end
+
+  def logout
+    @user = User.find(params[:id])
+
+    if (@user)
+      @user.update(active: false)
+      puts @user, @user.save!
+      redirect_to action: 'index'
+    else
+      render :index, status: :unprocessable_entity
     end
   end
 
