@@ -1,4 +1,4 @@
-<%= form_with model: @user do |form| %>
+<%= form_with url: @url, model: @user do |form| %>
     <div>
         <%= form.label :username %><br>
         <%= form.text_field :username, class: 'input' %><br>
@@ -16,6 +16,6 @@
     </div>
 
     <div>
-        <%= form.submit value: "Submit" %>
+        <%= form.submit value: @submit_text ,class: 'text-sm p-2 px-4 bg-blue-500 font-bold text-white rounded shadow hover:shadow-md' %>
     </div>
 <% end %>

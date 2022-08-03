@@ -9,6 +9,8 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @url = '/user'
+    @submit_text = 'Sign Up'
   end
 
   def create
@@ -24,6 +26,8 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
+    @url = '/user'
+    @submit_text = 'Update User'
   end
 
   def update
@@ -38,9 +42,12 @@ class UsersController < ApplicationController
 
   def login
     @user = User.new
+    @url = '/users/login_success'
+    @submit_text = 'Login'
   end
 
   def login_success
+    redirect_to action: 'index'
   end
 
   private

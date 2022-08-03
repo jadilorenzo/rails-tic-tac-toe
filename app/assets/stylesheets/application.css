@@ -29,3 +29,11 @@ a {
     outline: none;
     border-bottom: 2px solid rgb(47, 105, 244);
 }
+
+[type=submit] {
+    transition: ease-in-out 100ms;
+}
+
+label {
+
+}
