@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
+    @user = User.new(user_params, active: true)
 
     if @user.save
       puts true
@@ -47,7 +47,10 @@ class UsersController < ApplicationController
   end
 
   def login_success
-    if (User.find_by(user_params))
+    @user = User.find_by(user_params)
+
+    if (@user)
+      @user.update(active: true)
       redirect_to action: 'index'
     else
       redirect_to action: 'login'

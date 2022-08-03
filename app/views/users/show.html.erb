@@ -6,8 +6,9 @@
         <%= @user.username[0] %>
     </div>
     <div>
-        <h1><%= @user.username %></h1>
+        <p><%= @user.username %></p>
         <p><%= @user.password.split('').map{'•'}.join %></p>
+        <p><%= @user.active.to_s %></p>
     </div>
 
 </div>

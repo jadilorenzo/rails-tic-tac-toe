@@ -5,6 +5,7 @@
     <li class='mb-2'>
       Username: <%= link_to u.username, "/users/#{u.id}" %> <br/>
       Password: <%= u.password.split('').map{'•'}.join %><br/>
+      Active: <%= u.active %>
     </li>
   <% end %>
 </ul>
