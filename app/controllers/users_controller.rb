@@ -47,7 +47,11 @@ class UsersController < ApplicationController
   end
 
   def login_success
-    redirect_to action: 'index'
+    if (User.find_by(user_params))
+      redirect_to action: 'index'
+    else
+      redirect_to action: 'login'
+    end
   end
 
   private
