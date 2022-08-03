@@ -1,0 +1,15 @@
+<div class='mb-4'>
+    <%= link_to "Users", "/users" %>
+</div>
+<div class='flex'>
+    <div class='w-12 h-12 text-center bg-gray-300 pt-3 rounded-full mr-4 font-bold text-gray-700'>
+        <%= @user.username[0] %>
+    </div>
+    <div>
+        <h1><%= @user.username %></h1>
+        <p><%= @user.password.split('').map{'•'}.join %></p>
+    </div>
+
+</div>
+<br/>
+<%= link_to "Edit User", "/users/#{params[:id]}/edit" %>

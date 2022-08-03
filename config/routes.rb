@@ -3,4 +3,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   get "/", to: "home#index"
+  get "/users/login", to: "users#login"
+  resources :users
 end

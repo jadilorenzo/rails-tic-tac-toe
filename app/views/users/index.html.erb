@@ -1,0 +1,12 @@
+<h1 class='mb-2 font-bold text-xl'>Users</h1>
+
+<ul>
+  <% @users.each do |u| %>
+    <li class='mb-2'>
+      Username: <%= link_to u.username, "/users/#{u.id}" %> <br/>
+      Password: <%= u.password.split('').map{'•'}.join %><br/>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to "New User", '/users/new' %>

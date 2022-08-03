@@ -1,0 +1,21 @@
+<%= form_with model: @user do |form| %>
+    <div>
+        <%= form.label :username %><br>
+        <%= form.text_field :username, class: 'input' %><br>
+        <% user.errors.full_messages_for(:username).each do |message| %>
+          <div class='text-red-500 text-sm'><%= message %></div>
+        <% end %>
+    </div>
+
+    <div>
+        <%= form.label :password %><br>
+        <%= form.password_field :password, class: 'input' %><br>
+        <% user.errors.full_messages_for(:password).each do |message| %>
+          <div class='text-red-500 text-sm'><%= message %></div>
+        <% end %>
+    </div>
+
+    <div>
+        <%= form.submit value: "Submit" %>
+    </div>
+<% end %>

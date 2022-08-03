@@ -13,3 +13,19 @@
  *= require_tree .
  *= require_self
  */
+
+a {
+    color: rgb(47, 105, 244) !important;
+}
+
+.input {
+    /* border-radius: 0.2rem; */
+    border-bottom: 1px solid black;
+    margin-bottom: 1rem;
+    transition: ease-in-out 100ms;
+}
+
+.input:focus {
+    outline: none;
+    border-bottom: 2px solid rgb(47, 105, 244);
+}
