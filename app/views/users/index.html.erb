@@ -1,3 +1,11 @@
+<% content_for :header do %>
+  <% if @logged_in %>
+    <%= button_to "Logout", action: 'logout',  params: { id: @id } %>
+  <% else %>
+    <%= link_to "Login", "/users/login", class: 'header-link'  %>
+  <% end %>
+<% end %>
+
 <h1 class='mb-2 font-bold text-xl'>Users</h1>
 <%= link_to "Login", "/users/login" %>
 
@@ -7,7 +15,6 @@
       Username: <%= link_to u.username, "/users/#{u.id}" %> <br/>
       Password: <%= u.password.split('').map{'•'}.join %><br/>
       Active: <%= u.active %><br/>
-      <%= button_to "Logout", action: 'logout', params: { id: u.id }%>
     </li>
   <% end %>
 </ul>

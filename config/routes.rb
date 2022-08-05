@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
+  post "/game/update", to: "game#update"
+  get "/game", to: "game#index"
   get "/", to: "home#index"
   get "/users/login", to: "users#login"
   post "/users/login_success", to: "users#login_success"
-  post "/users/logout", to: 'users#logout'
+  post "/users/logout", to: "users#logout"
   resources :users
 end

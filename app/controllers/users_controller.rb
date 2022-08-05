@@ -1,6 +1,13 @@
 class UsersController < ApplicationController
   def index
     @users = User.all
+    @id = session['id']
+    @user = {active: false}
+    if @id
+      @user = User.find @id
+    end
+    @logged_in = (@id != nil) & @user['active']
+    puts @logged_in, @user['active']
   end
 
   def show
@@ -17,7 +24,6 @@ class UsersController < ApplicationController
     @user = User.new(user_params, active: true)
 
     if @user.save
-      puts true
       redirect_to @user
     else
       render :new, status: :unprocessable_entity
@@ -48,9 +54,10 @@ class UsersController < ApplicationController
 
   def login_success
     @user = User.find_by(user_params)
-    
+
     if (@user)
       @user.update(active: true)
+      session.update(id: @user.id)
       redirect_to action: 'index'
     else
       redirect_to action: 'login'
@@ -62,7 +69,6 @@ class UsersController < ApplicationController
 
     if (@user)
       @user.update(active: false)
-      puts @user, @user.save!
       redirect_to action: 'index'
     else
       render :index, status: :unprocessable_entity

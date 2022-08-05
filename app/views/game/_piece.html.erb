@@ -1,0 +1,5 @@
+<form class='border hover:bg-gray-100' method="post" action=<%= "/game/update?x=#{x}&y=#{y}" %>>
+    <button class='piece' type="submit"><%= @game[x][y] %></button>
+    <input type="hidden"/>
+</form>
+
