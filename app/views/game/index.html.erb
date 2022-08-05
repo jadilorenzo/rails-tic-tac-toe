@@ -1,4 +1,17 @@
+<% content_for :header do %>
+  <% if @logged_in %>
+    <%= button_to "Logout", controller: :users, action: 'logout',  params: { id: @id } %>
+  <% else %>
+    <%= link_to "Login", "/users/login", class: 'header-link'  %>
+  <% end %>
+<% end %>
+
+
 <h1 class='mb-2 font-bold text-xl'>Game#index</h1>
+
+<% if @your_turn %>
+    <p>It's Your Turn</p>
+<% end %>
 
 <div class='flex grid grid-cols-3 w-48 h-48'>
     <%= render "piece", user: @user, x: 0, y: 0 %>

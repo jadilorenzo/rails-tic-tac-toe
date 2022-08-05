@@ -10,11 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_03_191001) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_05_123759) do
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "game"
+    t.integer "player1_id"
+    t.integer "player2_id"
+    t.integer "turn_id"
+    t.index ["player1_id"], name: "index_games_on_player1_id"
+    t.index ["player2_id"], name: "index_games_on_player2_id"
+    t.index ["turn_id"], name: "index_games_on_turn_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -25,4 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_03_191001) do
     t.boolean "active"
   end
 
+  add_foreign_key "games", "users", column: "player1_id"
+  add_foreign_key "games", "users", column: "player2_id"
+  add_foreign_key "games", "users", column: "turn_id"
 end
