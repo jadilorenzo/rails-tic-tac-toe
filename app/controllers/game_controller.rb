@@ -10,6 +10,10 @@ class TicTacToeGame
   end
 
   def place(x, y, turn)
+    if @game[x][y] != " "
+      return false
+    end
+
     x_or_o = " "
     if turn == @x
       x_or_o = "x"
@@ -17,6 +21,8 @@ class TicTacToeGame
       x_or_o = "o"
     end
     @game[x][y] = x_or_o
+
+    true
   end
 
   def winner
@@ -37,6 +43,13 @@ class GameController < ApplicationController
     @your_turn = g.turn_id == @id
   end
 
+  # TEMPORARY
+  def clear
+    g = Game.first
+    g.game = JSON.generate [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+    redirect_to '/game' if g.save
+  end
+
   def update
     g = Game.first
     your_turn = g.turn_id == session['id']
@@ -47,19 +60,23 @@ class GameController < ApplicationController
 
     if your_turn
       tttg = TicTacToeGame.new game, g.player1_id, g.player2_id
-      tttg.place x, y, g.turn_id
-      g.game = JSON.generate tttg.game
-      if g.turn_id == g.player1_id
-        g.turn_id = g.player2_id
-      elsif g.turn_id == g.player2_id
-        g.turn_id = g.player1_id
+      if tttg.place x, y, g.turn_id
+        g.game = JSON.generate tttg.game
+        if g.turn_id == g.player1_id
+          g.turn_id = g.player2_id
+        elsif g.turn_id == g.player2_id
+          g.turn_id = g.player1_id
+        end
+        if g.save
+          ActionCable.server.broadcast("update", g.game)
+          redirect_to '/game'
+        end
+      else
+        redirect_to '/game'
       end
     end
-
-    if g.save
-      redirect_to '/game'
-    end
   end
+
 
   private
     def piece_params
