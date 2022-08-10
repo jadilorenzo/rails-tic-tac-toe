@@ -1,0 +1,31 @@
+<h1 class='mb-4'>New Game</h1>
+
+<%= form_with url: '/game/create', model: @game do |form| %>
+    <div class='mb-2'>
+        <%= form.label :name, value: "Game Name" %>
+        <%= form.text_field :name, class: 'input' %>
+        <% @game.errors.full_messages_for(:name).each do |message| %>
+          <div class='text-red-500 text-sm'><%= message %></div>
+        <% end %>
+    </div>
+
+    <div class='mb-2'>
+        <%= form.label :player1_id, value: "Player: X" %>
+        <%= @username ? @username : "..." %><%= form.hidden_field :player1_id, value: @id %>
+        <% @game.errors.full_messages_for(:player1_id).each do |message| %>
+          <div class='text-red-500 text-sm'><%= message %></div>
+        <% end %>
+    </div>
+
+    <div class='mb-4'>
+        <%= form.label :player2_id, value: "Player: O" %>
+        <%= form.select :player2_id, User.all.collect { |p| [ p.username, p.id ] }.filter { |p| p[1] != @id }, include_blank: true %>
+        <% @game.errors.full_messages_for(:player2_id).each do |message| %>
+          <div class='text-red-500 text-sm'><%= message %></div>
+        <% end %>
+    </div>
+
+    <div class='btn-blue'>
+        <%= form.submit value: "SUBMIT" %>
+    </div>
+<% end %>

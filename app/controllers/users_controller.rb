@@ -58,7 +58,7 @@ class UsersController < ApplicationController
     if (@user)
       @user.update(active: true)
       session.update(id: @user.id)
-      redirect_to action: 'index'
+      redirect_to '/game'
     else
       redirect_to action: 'login'
     end

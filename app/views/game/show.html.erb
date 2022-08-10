@@ -1,0 +1,28 @@
+<% content_for :header do %>
+  <% if @logged_in %>
+    <%= button_to "Logout", controller: :users, action: 'logout',  params: { id: @id } %>
+  <% else %>
+    <%= link_to "Login", "/users/login", class: 'header-link'  %>
+  <% end %>
+<% end %>
+
+
+<h1><%= @g.name %></h1>
+
+<div class='mb-2'><%= link_to "Back", "/game" %></div>
+
+<% if @your_turn %>
+    <p class='font-bold mb-2'>It's Your Turn</p>
+<% end %>
+
+<div class='flex grid grid-cols-3 w-48 h-48 border border-gray-100'>
+    <%= render "piece", user: @user, x: 0, y: 0, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 0, y: 1, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 0, y: 2, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 1, y: 0, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 1, y: 1, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 1, y: 2, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 2, y: 0, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 2, y: 1, id: @game_id, your_turn: @your_turn %>
+    <%= render "piece", user: @user, x: 2, y: 2, id: @game_id, your_turn: @your_turn %>
+</div>

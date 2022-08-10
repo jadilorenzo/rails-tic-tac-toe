@@ -33,40 +33,85 @@ class GameController < ApplicationController
   def index
     @id = session['id']
     user = {active: false}
+    user = User.find @id if @id
+    @logged_in = (@id != nil) & user['active']
+
+    @games = Game.all
+  end
+
+  def show
+    @game_id = params["id"]
+    @g = Game.find(@game_id)
+    @id = session['id']
+    user = {active: false}
+
     if @id
       user = User.find @id
     end
-    @logged_in = (@id != nil) & user['active']
 
-    g = Game.first
-    @game = JSON.parse(g.game)
-    @your_turn = g.turn_id == @id
+    @logged_in = (@id != nil) & user['active']
+    @game = JSON.parse(@g.game)
+    @your_turn = @g.turn_id == @id
   end
 
-  # TEMPORARY
-  def clear
-    g = Game.first
-    g.game = JSON.generate [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
-    redirect_to '/game' if g.save
+  def new
+    @game = Game.new
+
+    @id = session['id']
+    user = {active: false, username: "Not Logged In."}
+    @username = '...'
+    if @id
+      user = User.find @id
+      @username = user[:username]
+    else
+      @game.errors.add "User not logged in."
+    end
+
+
+  end
+
+  def create
+    @game = Game.new game_params
+
+
+    @id = session['id']
+    if @id
+      user = User.find @id
+      @username = user[:username]
+    else
+      @game.errors.add "User not logged in."
+    end
+
+    if @game.save
+      redirect_to @game
+    else
+      render 'new', status: :unprocessable_entity
+    end
   end
 
   def update
-    g = Game.first
+    game_id = params["id"]
+    g = Game.find(game_id)
     your_turn = g.turn_id == session['id']
     game = JSON.parse(g.game)
 
-    x = piece_params[:x].to_i
-    y = piece_params[:y].to_i
+    x = piece_params[:x]
+    y = piece_params[:y]
+    p1 = g.player1_id
+    p2 = g.player2_id
+    turn = g.turn_id
 
     if your_turn
-      tttg = TicTacToeGame.new game, g.player1_id, g.player2_id
-      if tttg.place x, y, g.turn_id
+      tttg = TicTacToeGame.new game, p1, p2
+
+      if tttg.place x, y, turn
         g.game = JSON.generate tttg.game
-        if g.turn_id == g.player1_id
-          g.turn_id = g.player2_id
-        elsif g.turn_id == g.player2_id
-          g.turn_id = g.player1_id
+        if turn == p1
+          g.turn_id = p2
+        elsif turn == p2
+          g.turn_id = p1
         end
+
         if g.save
           ActionCable.server.broadcast("update", g.game)
           redirect_to '/game'
@@ -80,6 +125,15 @@ class GameController < ApplicationController
 
   private
     def piece_params
-      {x: params.require(:x), y: params.require(:y)}
+      {x: params.require(:x).to_i, y: params.require(:y).to_i}
+    end
+
+    def game_params
+      g = params.require(:game).permit(:name, :player1_id, :player2_id).to_h
+      g[:game] = JSON.generate [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+      g[:turn_id] = g[:player1_id]
+      puts g
+
+      return g
     end
 end
