@@ -1,11 +1,4 @@
-<% content_for :header do %>
-  <% if @logged_in %>
-    <%= button_to "Logout", controller: :users, action: 'logout',  params: { id: @id } %>
-  <% else %>
-    <%= link_to "Login", "/users/login", class: 'header-link'  %>
-  <% end %>
-<% end %>
-
+<%= render "header", user: @user, logged_in: @logged_in, id: @id %>
 
 <h1><%= @g.name %></h1>
 

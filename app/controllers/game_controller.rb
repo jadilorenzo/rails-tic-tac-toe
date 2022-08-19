@@ -31,56 +31,26 @@ end
 
 class GameController < ApplicationController
   def index
-    @id = session['id']
-    user = {active: false}
-    user = User.find @id if @id
-    @logged_in = (@id != nil) & user['active']
-
+    handle_header()
     @games = Game.all
   end
 
   def show
+    handle_header()
     @game_id = params["id"]
     @g = Game.find(@game_id)
-    @id = session['id']
-    user = {active: false}
-
-    if @id
-      user = User.find @id
-    end
-
-    @logged_in = (@id != nil) & user['active']
     @game = JSON.parse(@g.game)
-    @your_turn = @g.turn_id == @id
   end
 
   def new
+    handle_header()
     @game = Game.new
-
-    @id = session['id']
-    user = {active: false, username: "Not Logged In."}
-    @username = '...'
-    if @id
-      user = User.find @id
-      @username = user[:username]
-    else
-      @game.errors.add "User not logged in."
-    end
-
-
+    @username = @id ? @user["username"] : "..."
   end
 
   def create
+    handle_header()
     @game = Game.new game_params
-
-
-    @id = session['id']
-    if @id
-      user = User.find @id
-      @username = user[:username]
-    else
-      @game.errors.add "User not logged in."
-    end
 
     if @game.save
       redirect_to @game
@@ -113,7 +83,7 @@ class GameController < ApplicationController
         end
 
         if g.save
-          ActionCable.server.broadcast("update", g.game)
+          ActionCable.server.broadcast "update", g.game
           redirect_to '/game'
         end
       else
@@ -135,5 +105,15 @@ class GameController < ApplicationController
       puts g
 
       return g
+    end
+
+    def handle_header()
+      @id = session['id']
+      @user = {active: false, username: '', password: ''}
+      @user = User.find @id if @id
+      @logged_in = (@id != nil) & @user['active']
+      if params['id']
+        @your_turn = Game.find(params['id']).turn_id == session['id']
+      end
     end
 end
